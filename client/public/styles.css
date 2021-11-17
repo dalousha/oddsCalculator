@@ -1,0 +1,11 @@
+body {
+  background-color: aqua;
+}
+
+.app {
+  align-items: center;
+}
+
+.odds-input-container {
+  flex-direction: column;
+}
