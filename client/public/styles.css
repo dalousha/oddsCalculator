@@ -21,3 +21,19 @@ body {
   margin-left: 10px;
   border-radius: 9px;
 }
+
+.bet-input-container {
+  margin-top: 20px;
+  display: inline-flex;
+}
+
+.bet-number-label {
+  padding: 10px;
+  font-weight: bold
+}
+
+.bet-input {
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 9px;
+}

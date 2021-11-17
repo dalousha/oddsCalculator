@@ -7,17 +7,25 @@ class App extends React.Component{
       oddsType: 'american',
       americanOdds: '',
       decimalOdds: '',
-      impliedProbability: ''
+      impliedProbability: '',
+      betAmount: '',
+      toWin: '',
+      payout: ''
     }
 
     this.onAmericanOddsChange = this.onAmericanOddsChange.bind(this);
     this.onDecimalOddsChange = this.onDecimalOddsChange.bind(this);
     this.onProbablityChange = this.onProbablityChange.bind(this);
 
+    this.onBetAmountChange = this.onBetAmountChange.bind(this);
+    this.onAmountEarnedChange = this.onAmountEarnedChange.bind(this);
+
     this.calcAmericanToDecimals = this.calcAmericanToDecimals.bind(this);
     this.calcDecimalToAmerican = this.calcDecimalToAmerican.bind(this);
     this.calcDecimalToProbability = this.calcDecimalToProbability.bind(this);
     this.calcProbabilityToDecimal = this.calcProbabilityToDecimal.bind(this);
+
+
 
   }
 
@@ -79,11 +87,38 @@ class App extends React.Component{
     })
   }
 
+  onBetAmountChange(e) {
+    this.setState({
+      betAmount: e.target.value
+    }, () => {
+      if (this.state.betAmount > 0 && this.state.decimalOdds > 1) {
+        const payOut = Math.ceil(this.state.betAmount * this.state.decimalOdds * 100) / 100;
+        console.log(payOut)
+        const toWin = payOut - this.state.betAmount
+        this.setState({
+          payOut: payOut,
+          toWin: Math.ceil(toWin * 100) / 100
+        })
+      } else {
+        this.setState({
+          payOut: '',
+          toWin: ''
+        })
+      }
+    })
+  }
+
+  onAmountEarnedChange(e) {
+    this.setState({
+      toWin: e.target.value
+    })
+  }
+
   calcAmericanToDecimals(num) {
     if (num >= 100) {
-      return Math.ceil(((num / 100) + 1) * 100) / 100
+      return Math.ceil(((num / 100) + 1) * 1000000) / 1000000
     } else if (num < -100) {
-      return Math.ceil((1 - (100 / num)) * 100) / 100
+      return Math.ceil((1 - (100 / num)) * 1000000) / 1000000
     }
   }
 
@@ -107,33 +142,61 @@ class App extends React.Component{
     return (
       <div className="app">
         <h1>Betting Odds Calculator</h1>
+        <div>
+          <div className="odds-input-container">
+            <label className="type-odds-label">American Odds</label>
+            <input className="odds-input"
+              type='number'
+              value={this.state.americanOdds}
+              onChange={this.onAmericanOddsChange}
+            />
+          </div>
 
-        <div className="odds-input-container">
-          <label className="type-odds-label">American Odds</label>
-          <input className="odds-input"
+          <div className="odds-input-container">
+            <label className="type-odds-label">Decimal Odds</label>
+            <input className="odds-input"
+              type='number'
+              value={this.state.decimalOdds}
+              onChange={this.onDecimalOddsChange}
+            />
+          </div>
+
+          <div className="odds-input-container">
+            <label className="type-odds-label">Implied Probability</label>
+            <input className="odds-input"
+              type='number'
+              value={this.state.impliedProbability}
+              onChange={this.onProbablityChange}
+            />
+          </div>
+        </div>
+
+        <div className="bet-input-container">
+        <label className="bet-number-label">Wager Amount</label>
+          <input className="bet-input"
             type='number'
-            value={this.state.americanOdds}
-            onChange={this.onAmericanOddsChange}
+            value={this.state.betAmount}
+            onChange={this.onBetAmountChange}
           />
         </div>
 
-        <div className="odds-input-container">
-          <label className="type-odds-label">Decimal Odds</label>
-          <input className="odds-input"
+        <div className="bet-input-container">
+        <label className="bet-number-label">Amount Earned</label>
+          <input className="bet-input"
             type='number'
-            value={this.state.decimalOdds}
-            onChange={this.onDecimalOddsChange}
+            value={this.state.toWin}
+            onChange={this.onAmountEarnedChange}
           />
         </div>
 
-        <div className="odds-input-container">
-          <label className="type-odds-label">Implied Probability</label>
-          <input className="odds-input"
-            type='number'
-            value={this.state.impliedProbability}
-            onChange={this.onProbablityChange}
-          />
+
+
+        <div className="bet-input-container">
+          <label className="bet-number-label">
+            Payout: {this.state.payOut}
+          </label>
         </div>
+
 
       </div>
     )
