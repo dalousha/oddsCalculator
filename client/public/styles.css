@@ -1,11 +1,23 @@
 body {
-  background-color: aqua;
+  background-color: plum;
 }
 
 .app {
   align-items: center;
+  justify-content: center;
 }
 
 .odds-input-container {
-  flex-direction: column;
+  display: inline-flex;
+}
+
+.type-odds-label {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.odds-input {
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 9px;
 }
