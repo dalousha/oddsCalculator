@@ -7,16 +7,19 @@ class App extends React.Component{
       oddsType: 'american',
       americanOdds: '',
       decimalOdds: '',
+      impliedProbability: ''
     }
 
     this.onAmericanOddsChange = this.onAmericanOddsChange.bind(this);
     this.onDecimalOddsChange = this.onDecimalOddsChange.bind(this);
+    this.onProbablityChange = this.onProbablityChange.bind(this);
+
     this.calcAmericanToDecimals = this.calcAmericanToDecimals.bind(this);
     this.calcDecimalToAmerican = this.calcDecimalToAmerican.bind(this);
+    this.calcDecimalToProbability = this.calcDecimalToProbability.bind(this);
+    this.calcProbabilityToDecimal = this.calcProbabilityToDecimal.bind(this);
 
   }
-
-
 
   onAmericanOddsChange(e) {
     this.setState({
@@ -24,10 +27,15 @@ class App extends React.Component{
     }, () => {
       if (this.state.americanOdds.length >= 3) {
       const decimalOdds = this.calcAmericanToDecimals(this.state.americanOdds);
+      const impliedProbability = this.calcDecimalToProbability(decimalOdds);
       this.setState({
-        decimalOdds: decimalOdds
+        decimalOdds: decimalOdds,
+        impliedProbability: impliedProbability
       })} else {
-        this.setState({decimalOdds: ''})
+        this.setState({
+          decimalOdds: '',
+          impliedProbability: ''
+        })
       }
     })
   }
@@ -38,14 +46,36 @@ class App extends React.Component{
     }, () => {
       if (this.state.decimalOdds > 1) {
         const americanOdds = this.calcDecimalToAmerican(this.state.decimalOdds);
+        const impliedProbability = this.calcDecimalToProbability(this.state.decimalOdds)
         this.setState({
-          americanOdds: americanOdds
+          americanOdds: americanOdds,
+          impliedProbability: impliedProbability
         })
       } else {
         this.setState({
-          americanOdds: ''
+          americanOdds: '',
+          impliedProbability: ''
         })
       }
+    })
+  }
+
+  onProbablityChange(e) {
+    this.setState({
+      impliedProbability: e.target.value
+    }, () => {
+      if (this.state.impliedProbability > 0) {
+        const decimalOdds = this.calcProbabilityToDecimal(this.state.impliedProbability);
+        const americanOdds = this.calcDecimalToAmerican(decimalOdds);
+        this.setState({
+          americanOdds: americanOdds,
+          decimalOdds: decimalOdds
+        })} else {
+          this.setState({
+            americanOdds: '',
+            decimalOdds: ''
+          })
+        }
     })
   }
 
@@ -65,6 +95,14 @@ class App extends React.Component{
     }
   }
 
+  calcDecimalToProbability(num) {
+    return Math.ceil(((100/num)) * 100) / 100;
+  }
+
+  calcProbabilityToDecimal(num) {
+    return 100/num
+  }
+
   render() {
     return (
       <div className="app">
@@ -73,7 +111,7 @@ class App extends React.Component{
         <div className="odds-input-container">
           <label className="type-odds-label">American Odds</label>
           <input className="odds-input"
-            type='text'
+            type='number'
             value={this.state.americanOdds}
             onChange={this.onAmericanOddsChange}
           />
@@ -82,10 +120,18 @@ class App extends React.Component{
         <div className="odds-input-container">
           <label className="type-odds-label">Decimal Odds</label>
           <input className="odds-input"
-            type='text'
+            type='number'
             value={this.state.decimalOdds}
             onChange={this.onDecimalOddsChange}
+          />
+        </div>
 
+        <div className="odds-input-container">
+          <label className="type-odds-label">Implied Probability</label>
+          <input className="odds-input"
+            type='number'
+            value={this.state.impliedProbability}
+            onChange={this.onProbablityChange}
           />
         </div>
 
