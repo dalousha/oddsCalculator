@@ -1,5 +1,5 @@
 body {
-  background-color: plum;
+  background-color: plum !important;
 }
 
 .app {
@@ -36,4 +36,8 @@ body {
   padding: 10px;
   margin-left: 10px;
   border-radius: 9px;
+}
+
+.navbar {
+  background-color: white;
 }
