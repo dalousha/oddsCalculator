@@ -9,8 +9,8 @@ class App extends React.Component{
       decimalOdds: '',
       impliedProbability: '',
       betAmount: '',
-      toWin: '',
-      payout: ''
+      toWin: 0,
+      payout: 0
     }
 
     this.onAmericanOddsChange = this.onAmericanOddsChange.bind(this);
@@ -38,11 +38,15 @@ class App extends React.Component{
       const impliedProbability = this.calcDecimalToProbability(decimalOdds);
       this.setState({
         decimalOdds: decimalOdds,
-        impliedProbability: impliedProbability
+        impliedProbability: impliedProbability,
+        payOut: this.state.betAmount * decimalOdds,
+        toWin: (this.state.betAmount * decimalOdds - this.state.betAmount)
       })} else {
         this.setState({
           decimalOdds: '',
-          impliedProbability: ''
+          impliedProbability: '',
+          toWin: 0,
+          payOut: 0
         })
       }
     })
@@ -57,12 +61,16 @@ class App extends React.Component{
         const impliedProbability = this.calcDecimalToProbability(this.state.decimalOdds)
         this.setState({
           americanOdds: americanOdds,
-          impliedProbability: impliedProbability
+          impliedProbability: impliedProbability,
+          payOut: this.state.betAmount * this.state.decimalOdds,
+          toWin: (this.state.betAmount * this.state.decimalOdds - this.state.betAmount)
         })
       } else {
         this.setState({
           americanOdds: '',
-          impliedProbability: ''
+          impliedProbability: '',
+          payOut: 0,
+          toWin: 0
         })
       }
     })
@@ -77,11 +85,15 @@ class App extends React.Component{
         const americanOdds = this.calcDecimalToAmerican(decimalOdds);
         this.setState({
           americanOdds: americanOdds,
-          decimalOdds: decimalOdds
+          decimalOdds: decimalOdds,
+          payOut: this.state.betAmount * decimalOdds,
+          toWin: (this.state.betAmount * decimalOdds - this.state.betAmount)
         })} else {
           this.setState({
             americanOdds: '',
-            decimalOdds: ''
+            decimalOdds: '',
+            payOut: 0,
+            toWin: 0
           })
         }
     })
