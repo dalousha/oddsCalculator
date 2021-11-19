@@ -3,7 +3,6 @@ import React from 'react'
 class Home extends React.Component {
   constructor(props) {
     super(props)
-    console.log('this should be here')
   }
 
 
@@ -12,7 +11,7 @@ class Home extends React.Component {
     return(
       <div>
         <h1>This is the home page.</h1>
-        <text>work please</text>
+        why is this not working
       </div>
     )
   }
